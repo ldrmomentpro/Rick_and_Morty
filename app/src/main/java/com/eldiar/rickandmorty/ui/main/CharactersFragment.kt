@@ -41,9 +41,6 @@ class CharactersFragment : Fragment() {
                 adapter.submitData(it)
             }
         }
-        viewModel.error.observe(viewLifecycleOwner) {
-            binding.errorTv.text = it.message
-        }
     }
 
     private fun initRecycler() {
@@ -52,10 +49,11 @@ class CharactersFragment : Fragment() {
             adapter.loadStateFlow.collectLatest {
                 when (it.refresh) {
                     is LoadState.Loading -> binding.progressBar.isVisible = true
-                    is LoadState.NotLoading -> {
+                    is LoadState.NotLoading -> binding.progressBar.isVisible = false
+                    is LoadState.Error -> {
                         binding.progressBar.isVisible = false
+                        binding.errorTv.isVisible = true
                     }
-                    is LoadState.Error -> binding.errorTv.isVisible = true
                 }
             }
         }

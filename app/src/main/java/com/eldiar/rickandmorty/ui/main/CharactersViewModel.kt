@@ -17,10 +17,6 @@ class CharactersViewModel(private val repo: CharactersRepository) : ViewModel() 
     val characterList: Flow<PagingData<Character>>
         get() = _charactersList
 
-    private val _error = MutableLiveData<Throwable>()
-    val error: LiveData<Throwable>
-        get() = _error
-
     private suspend fun getAllCharacters(): Flow<PagingData<Character>> =
         repo.getAllCharacters()
 
@@ -33,7 +29,6 @@ class CharactersViewModel(private val repo: CharactersRepository) : ViewModel() 
             val result =
                 kotlin.runCatching { getAllCharacters().cachedIn(viewModelScope) }
             result.onSuccess { _charactersList = it }
-            result.onFailure { _error.value = it }
         }
     }
 }
