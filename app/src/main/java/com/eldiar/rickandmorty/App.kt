@@ -1,6 +1,7 @@
 package com.eldiar.rickandmorty
 
 import android.app.Application
+import com.eldiar.rickandmorty.di.appModule
 import com.eldiar.rickandmorty.di.networkModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -12,11 +13,8 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         startKoin {
-            if (BuildConfig.DEBUG) {
-                androidLogger(level = Level.DEBUG)
-            }
             androidContext(this@App)
-            modules(networkModule)
+            modules(appModule, networkModule)
         }
     }
 }

@@ -5,13 +5,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import com.eldiar.rickandmorty.databinding.FragmentCharactersBinding
+import kotlinx.coroutines.flow.collectLatest
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CharactersFragment : Fragment() {
 
     private var _binding: FragmentCharactersBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel: CharactersViewModel by viewModel()
+    private val adapter = CharactersAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -23,9 +31,33 @@ class CharactersFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.hello.setOnClickListener {
-            val action = CharactersFragmentDirections.actionCharactersFragmentToCharacterFragment()
-            this.findNavController().navigate(action)
+        initRecycler()
+        subscribeToLiveData()
+    }
+
+    private fun subscribeToLiveData() {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.characterList.collectLatest {
+                adapter.submitData(it)
+            }
+        }
+        viewModel.error.observe(viewLifecycleOwner) {
+            binding.errorTv.text = it.message
+        }
+    }
+
+    private fun initRecycler() {
+        binding.characterRecycler.adapter = adapter
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            adapter.loadStateFlow.collectLatest {
+                when (it.refresh) {
+                    is LoadState.Loading -> binding.progressBar.isVisible = true
+                    is LoadState.NotLoading -> {
+                        binding.progressBar.isVisible = false
+                    }
+                    is LoadState.Error -> binding.errorTv.isVisible = true
+                }
+            }
         }
     }
 
