@@ -12,6 +12,8 @@ import com.eldiar.rickandmorty.databinding.CharacterItemBinding
 class CharactersAdapter :
     PagingDataAdapter<Character, CharactersAdapter.CharactersViewHolder>(CharactersComparator()) {
 
+    var onClick: ((characterId: Int) -> Unit)? = null
+
     override fun onBindViewHolder(holder: CharactersViewHolder, position: Int) {
         getItem(position)?.let { holder.bind(it) }
     }
@@ -27,7 +29,7 @@ class CharactersAdapter :
         return CharactersViewHolder(binding)
     }
 
-    class CharactersViewHolder(private val binding: CharacterItemBinding) :
+    inner class CharactersViewHolder(private val binding: CharacterItemBinding) :
             RecyclerView.ViewHolder(binding.root) {
 
                 fun bind(item: Character) {
@@ -36,6 +38,7 @@ class CharactersAdapter :
                         genderTv.text = item.gender
                         speciesTv.text = item.species
                         avatarIv.load(item.image)
+                        characterCard.setOnClickListener { onClick?.invoke(item.id) }
                     }
                 }
             }

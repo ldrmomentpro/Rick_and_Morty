@@ -33,6 +33,7 @@ class CharactersFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initRecycler()
         subscribeToLiveData()
+        doOnClick()
     }
 
     private fun subscribeToLiveData() {
@@ -40,6 +41,14 @@ class CharactersFragment : Fragment() {
             viewModel.characterList.collectLatest {
                 adapter.submitData(it)
             }
+        }
+    }
+
+    private fun doOnClick() {
+        adapter.onClick = {
+            val action =
+                CharactersFragmentDirections.actionCharactersFragmentToCharacterFragment(it)
+            this.findNavController().navigate(action)
         }
     }
 

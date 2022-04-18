@@ -9,12 +9,16 @@
         android:id="@+id/characterFragment"
         android:name="com.eldiar.rickandmorty.ui.detail.CharacterFragment"
         android:label="fragment_character"
-        tools:layout="@layout/fragment_character" />
+        tools:layout="@layout/fragment_character">
+        <argument
+            android:name="id"
+            app:argType="integer" />
+    </fragment>
     <fragment
         android:id="@+id/charactersFragment"
         android:name="com.eldiar.rickandmorty.ui.main.CharactersFragment"
         android:label="fragment_characters"
-        tools:layout="@layout/fragment_characters" >
+        tools:layout="@layout/fragment_characters">
         <action
             android:id="@+id/action_charactersFragment_to_characterFragment"
             app:destination="@id/characterFragment" />
