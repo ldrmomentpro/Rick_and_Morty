@@ -1,4 +1,4 @@
-package com.eldiar.rickandmorty.features
+package com.eldiar.rickandmorty.ui.main
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
