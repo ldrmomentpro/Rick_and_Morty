@@ -16,4 +16,6 @@ class CharactersRepositoryImpl(private val api: CharactersApi) : CharactersRepos
             CharactersPagingSource(api)
         }.flow
     }
+
+    override suspend fun getCharacterById(id: Int): Character = api.getCharacterDetailById(id)
 }
