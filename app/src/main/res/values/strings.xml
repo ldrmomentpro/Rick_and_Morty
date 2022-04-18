@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Rick and Morty</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="error">Упс, что-то пошло не так.</string>
+    <string name="error">Упс, что-то пошло не так.\nПотяните вниз для обновления.</string>
     <string name="name">Имя: %s</string>
     <string name="species">Раса: %s</string>
     <string name="gender">Пол: %s</string>

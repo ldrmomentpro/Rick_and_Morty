@@ -31,15 +31,26 @@ class CharactersFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initRecycler()
+        initAdapter()
         subscribeToLiveData()
         doOnClick()
+        doOnSwipeRefresh()
     }
 
     private fun subscribeToLiveData() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.characterList.collectLatest {
                 adapter.submitData(it)
+            }
+        }
+    }
+
+    private fun doOnSwipeRefresh() {
+        binding.apply {
+            swpRefresh.setOnRefreshListener {
+                subscribeToLiveData()
+                viewModel.getCharacters()
+                swpRefresh.isRefreshing = false
             }
         }
     }
@@ -52,15 +63,23 @@ class CharactersFragment : Fragment() {
         }
     }
 
-    private fun initRecycler() {
+    private fun initAdapter() {
         binding.characterRecycler.adapter = adapter
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             adapter.loadStateFlow.collectLatest {
                 when (it.refresh) {
-                    is LoadState.Loading -> binding.progressBar.isVisible = true
-                    is LoadState.NotLoading -> binding.progressBar.isVisible = false
+                    is LoadState.Loading -> {
+                        binding.errorTv.isVisible = false
+                        binding.progressBar.isVisible = true
+                    }
+                    is LoadState.NotLoading -> {
+                        binding.progressBar.isVisible = false
+                        binding.errorTv.isVisible = false
+                        binding.characterRecycler.isVisible = true
+                    }
                     is LoadState.Error -> {
                         binding.progressBar.isVisible = false
+                        binding.characterRecycler.isVisible = false
                         binding.errorTv.isVisible = true
                     }
                 }

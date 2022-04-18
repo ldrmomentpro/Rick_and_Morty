@@ -1,10 +1,11 @@
-package com.eldiar.rickandmorty
+package com.eldiar.rickandmorty.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
+import com.eldiar.rickandmorty.R
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 

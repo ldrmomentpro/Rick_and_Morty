@@ -22,7 +22,7 @@ class CharactersViewModel(private val repo: CharactersRepository) : ViewModel() 
         getCharacters()
     }
 
-    private fun getCharacters() {
+    fun getCharacters() {
         viewModelScope.launch {
             val result =
                 kotlin.runCatching { getAllCharacters().cachedIn(viewModelScope) }

@@ -34,6 +34,7 @@ class CharacterDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         getCharacterDetailResponse()
         loadStatus()
+        doOnSwipeRefresh()
     }
 
     private fun getCharacterDetailResponse() {
@@ -47,23 +48,34 @@ class CharacterDetailFragment : Fragment() {
                     ApiStatus.LOADING -> {
                         contentCl.isVisible = false
                         errorTv.isVisible = false
+                        swpRefresh.isRefreshing = true
                         progressBar.isVisible = true
                     }
                     ApiStatus.ERROR -> {
                         contentCl.isVisible = false
                         progressBar.isVisible = false
+                        swpRefresh.isRefreshing = false
                         errorTv.isVisible = true
                     }
                     ApiStatus.DONE -> {
                         progressBar.isVisible = false
                         errorTv.isVisible = false
+                        swpRefresh.isRefreshing = false
                         contentCl.isVisible = true
                         subscribeToLiveData()
                     }
                 }
             }
         }
+    }
 
+    private fun doOnSwipeRefresh() {
+        binding.apply {
+            swpRefresh.setOnRefreshListener {
+                getCharacterDetailResponse()
+                swpRefresh.isRefreshing = false
+            }
+        }
     }
 
     private fun subscribeToLiveData() {
