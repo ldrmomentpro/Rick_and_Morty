@@ -1,7 +1,7 @@
 package com.eldiar.rickandmorty.di
 
 import com.eldiar.rickandmorty.data.network.CharactersApi
-import com.eldiar.rickandmorty.data.network.CharactersApi.Companion.BASE_URL
+import com.eldiar.rickandmorty.utils.Constants.BASE_URL
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
